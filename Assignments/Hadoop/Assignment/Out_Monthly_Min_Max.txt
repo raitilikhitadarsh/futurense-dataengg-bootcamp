@@ -1,0 +1,14 @@
+"June_temp_min"	0.0
+"March_temp_max"	29.1
+"March_temp_min"	-3.2
+"May_temp_max"	31.1
+"January_temp_max"	26.5
+"January_temp_min"	-7.9
+"July_temp_max"	36.0
+"July_temp_min"	19.8
+"June_temp_max"	33.6
+"April_temp_max"	30.8
+"April_temp_min"	8.0
+"February_temp_max"	26.6
+"February_temp_min"	-3.5
+"May_temp_min"	14.3

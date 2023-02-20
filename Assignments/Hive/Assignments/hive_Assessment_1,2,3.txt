@@ -1,0 +1,178 @@
+1     : !connect jdbc:hive2:// username password
+2     : show databases;
+3     : !q
+4     : !connect jdbc:hive2://localhost:10000 username password
+5     : Allow port 10002
+6     : ;
+7     : !connect jdbc:hive2:// username password
+8     : !connect jdbc:hive2://localhost:10000 username password
+9     : create database demo;
+10    : show databases;
+11    : use demo;
+12    : create table if not exists rating(userID int, movieID int, ratings int, timestamps String)
+13    : COMMENT 'Movie Rating details'
+14    : ROW FORMAT DELIMITED
+15    : FIELDS TERMINATED BY ','
+16    : LINES TERMINATED BY '\n'
+17    : STORED AS TEXTFILE;
+18    : SHOW TABLES;
+19    : LOAD DATA LOCAL INPATH '/home/hive/data.csv' INTO TABLE emp.employee;
+20    : LOAD DATA LOCAL INPATH '/home/adarsh/Downloads/rating.csv' INTO TABLE demo.rating;
+21    : LOAD DATA LOCAL INPATH '/home/adarsh/Downloads/ratings.csv' INTO TABLE demo.rating;
+22    : select count(*) from rating;
+23    : select * from rating limit 10;
+24    : select ratings, count(ratings) from rating group by ratings;
+25    : select ratings, count(ratings) from rating group by ratings limit 10;
+26    : create database retail;
+27    : use retail;
+28    : create table if not exists Customers(custID int, last_name String, first_name String, age int, profession String)
+29    : COMMENT 'Customer details'
+30    : ROW FORMAT DELIMITED
+31    : FIELDS TERMINATED BY ','
+32    : LINES TERMINATED BY '\n'
+33    : STORED AS TEXTFILE;
+34    : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/retail/Customer.txt' INTO TABLE retail.Customers;
+35    : select * from Customer;
+36    : select * from Customers;
+37    : !connect jdbc:hive2:// username password
+38    : !connect jdbc:hive2://localhost:10000 username password
+39    : show databases;
+40    : use retail;
+41    : show tables;
+42    : create table if not exists Transactions(trans_id int, trans_date string, cust_id int, amount double, category String, desc String, city String, state String, pymt_mode String)
+43    : COMMENT 'Transaction details'
+44    : ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+45    : WITH SERDEPROPERTIES (
+46    :    "separatorChar" = ",",
+47    :    "quoteChar"     = "'",
+48    :    "serialization.format" = "1",
+49    :    "date.format" = "MM-dd-yyyy"
+50    : )
+51    : STORED AS TEXTFILE;
+52    : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/retail/Transactions.txt' INTO TABLE retail.Transactions;
+53    : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/retail/Transaction.txt' INTO TABLE retail.Transactions;
+54    : select * from Transactions limit 5;
+55    : select month(trans_date) from Transactions limit 5;
+56    : select date_format(trans_date, "mm-dd-yyyy") from Transactions limit 5;
+57    : select date_format(trans_date, "%Y") from Transactions limit 5;
+58    : select date_format(trans_date, "%y") from Transactions limit 5;
+59    : select cast(trans_date as date) from Transactions limit 5;
+60    : select trans_date from Transaction limit 5;
+61    : select * from Transactions limit 5;
+62    : drop table Transactions;
+63    : show tables;
+64    : create table if not exists Transactions(trans_id int, trans_date date, cust_id int, amount double, category String, desc String, city String, state String, pymt_mode String)
+65    : COMMENT 'Transaction details'
+66    : ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.OpenCSVSerde'
+67    : WITH SERDEPROPERTIES (
+68    :    "separatorChar" = ",",
+69    :    "quoteChar"     = "'",
+70    :    "serialization.format" = "1",
+71    :    "date.format" = "MM-dd-yyyy"
+72    : )
+73    : STORED AS TEXTFILE;
+74    : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/retail/Transaction.txt' INTO TABLE retail.Transactions;
+75    : select * from Transactions limit 5;
+76    : desc Transactions;
+77    : drop table Transactions;
+78    : show tables;
+79    : CREATE TABLE IF NOT EXISTS TRANSACTIONS(trans_id int,trans_date string, cust_id int, amount double, category string, desc string, city string, state string, pymt_mode string)
+80    : COMMENT 'Transactions Details'
+81    : ROW FORMAT DELIMITED
+82    : FIELDS TERMINATED BY ','
+83    : LINES TERMINATED BY '\n'
+84    : STORED AS TEXTFILE;
+85    : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/retail/Transaction.txt' INTO TABLE retail.Transactions;
+86    : select * from transactions limit 5;
+87    : select from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd') from transactions limit 5;
+88    : desc transactions;
+89    : select cust_id, count(trans_id) from transactions group by cust_id;
+90    : desc transactions;
+91    : select cust_id, sum(amount) from transactions group by cust_id;
+92    : desc transactions;
+93    : select distinct pymt_mode from transactions;
+94    : select cust_id, count(pymt_mode) from transactions group by cust_id;
+95    : select cust_id, pymt_mode, count(pymt_mode) from transactions group by cust_id, pymt_mode;
+96    : select cust_id, sum(amount) as tot_amt from transactions group by cust_id order by tot_amt desc limit 3;
+97    : desc transactions;
+98    : select city, count(trans_id) from transactions group by city order by count(trans_id) desc limit 3;
+99    : select from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd') from transactions limit 5;
+100   : select from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy') from transactions limit 5;
+101   : select month(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy')) as month, max(amount) from transactions group by month;
+102   : select month(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy')) as month_, max(amount) from transactions group by month_;
+103   : select month(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy')) as trans_month, max(amount) from transactions group by trans_month;
+104   : select month(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy')) as trans_month from transactions;
+105   : select MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy')) as trans_month from transactions;
+106   : select from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'MM-dd-yyyy') as trans_month from transactions;
+107   : SELECT from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd') as trans_date_formatted, MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd')) as trans_month
+108   : FROM transactions
+109   : LIMIT 5;
+110   : SELECT MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd')) as trans_month from transactions;
+111   : SELECT MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd')) as trans_month, max(amount) as highest_transaction from transactions group by trans_month;
+112   : SELECT MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd')) as trans_month, max(amount) as highest_transaction from transactions group by MONTH(from_unixtime(unix_timestamp(trans_date, 'MM-dd-yyyy'), 'yyyy-MM-dd'));
+113   : show create table transactions;
+114   : CREATE TABLE IF NOT EXISTS weather (WBANNO int, LST_DATE DATE, CRX_VN FLOAT, LONGITUDE FLOAT,LATITUDE FLOAT,T_DAILY_MAX FLOAT,T_DAILY_MIN FLOAT)
+115   : COMMENT 'Weather Details'
+116   : ROW FORMAT DELIMITED
+117   : FIELDS TERMINATED BY ','
+118   : LINES TERMINATED BY '\n'
+119   : STORED AS TEXTFILE;
+120   : show tables;
+121   : drop table weather;
+122   : show databases;
+123   : use demo;
+124   : show databases;
+125   : show tables;
+126   : CREATE TABLE IF NOT EXISTS weather (WBANNO int, LST_DATE DATE, CRX_VN FLOAT, LONGITUDE FLOAT,LATITUDE FLOAT,T_DAILY_MAX FLOAT,T_DAILY_MIN FLOAT)
+127   : COMMENT 'Weather Details'
+128   : ROW FORMAT DELIMITED
+129   : FIELDS TERMINATED BY ','
+130   : LINES TERMINATED BY '\n'
+131   : STORED AS TEXTFILE;
+132   : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/weather/weather_data.txt' INTO TABLE demo.weather;
+133   : select * from weather limit 5;
+134   : select * from weather;
+135   : drop table weather;
+136   : show tables;
+137   : CREATE TABLE IF NOT EXISTS weather (WBANNO int, LST_DATE DATE, CRX_VN FLOAT, LONGITUDE FLOAT,LATITUDE FLOAT,T_DAILY_MAX FLOAT,T_DAILY_MIN FLOAT)
+138   : COMMENT 'Weather Details'
+139   : ROW FORMAT DELIMITED
+140   : FIELDS TERMINATED BY ''
+141   : STORED AS TEXTFILE;
+142   : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/weather/weather_data.txt' INTO TABLE demo.weather;
+143   : select * from weather limit 5;
+144   : drop table weather;
+145   : show tables;
+146   : CREATE TABLE IF NOT EXISTS weather (WBANNO int, LST_DATE DATE, CRX_VN FLOAT, LONGITUDE FLOAT,LATITUDE FLOAT,T_DAILY_MAX FLOAT,T_DAILY_MIN FLOAT,
+147   : T_DAILY_MEAN FLOAT,T_DAILY_AVG FLOAT,P_DAILY_CALC FLOAT,SOLARAD_DAILY String,SUR_TEMP_DAILY_TYPE FLOAT, SUR_TEMP_DAILY_MAX FLOAT,
+148   : SUR_TEMP_DAILY_MIN FLOAT,SUR_TEMP_DAILY_AVG FLOAT,RH_DAILY_MAX FLOAT, RH_DAILY_MIN FLOAT,RH_DAILY_AVG FLOAT,SOIL_MOISTURE_5_DAILY FLOAT,
+149   : SOIL_MOISTURE_10_DAILY FLOAT, SOIL_MOISTURE_20_DAILY  FLOAT, SOIL_MOISTURE_50_DAILY FLOAT, SOIL_MOISTURE_100_DAILY FLOAT,
+150   : SOIL_TEMP_5_DAILY FLOAT, SOIL_TEMP_10_DAILY FLOAT, SOIL_TEMP_20_DAILY FLOAT, SOIL_TEMP_50_DAILY FLOAT, SOIL_TEMP_100_DAILY  FLOAT)
+151   : COMMENT 'Weather Details'
+152   : ROW FORMAT DELIMITED
+153   : FIELDS TERMINATED BY ','
+154   : LINES TERMINATED BY '\n'
+155   : STORED AS TEXTFILE;
+156   : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/weather/weather_data.txt' INTO TABLE demo.weather;
+157   : select * from weather limit 5;
+158   : select lst_date, t_daily_max, t_daily_min from weather;
+159   : drop table weather;
+160   : show tables;
+161   : CREATE TABLE IF NOT EXISTS weather (WBANNO int, LST_DATE STRING, CRX_VN FLOAT, LONGITUDE FLOAT,LATITUDE FLOAT,T_DAILY_MAX FLOAT,T_DAILY_MIN FLOAT,
+162   : T_DAILY_MEAN FLOAT,T_DAILY_AVG FLOAT,P_DAILY_CALC FLOAT,SOLARAD_DAILY String,SUR_TEMP_DAILY_TYPE FLOAT, SUR_TEMP_DAILY_MAX FLOAT,
+163   : SUR_TEMP_DAILY_MIN FLOAT,SUR_TEMP_DAILY_AVG FLOAT,RH_DAILY_MAX FLOAT, RH_DAILY_MIN FLOAT,RH_DAILY_AVG FLOAT,SOIL_MOISTURE_5_DAILY FLOAT,
+164   : SOIL_MOISTURE_10_DAILY FLOAT, SOIL_MOISTURE_20_DAILY  FLOAT, SOIL_MOISTURE_50_DAILY FLOAT, SOIL_MOISTURE_100_DAILY FLOAT,
+165   : SOIL_TEMP_5_DAILY FLOAT, SOIL_TEMP_10_DAILY FLOAT, SOIL_TEMP_20_DAILY FLOAT, SOIL_TEMP_50_DAILY FLOAT, SOIL_TEMP_100_DAILY  FLOAT)
+166   : COMMENT 'Weather Details'
+167   : ROW FORMAT DELIMITED
+168   : FIELDS TERMINATED BY ','
+169   : LINES TERMINATED BY '\n'
+170   : STORED AS TEXTFILE;
+171   : LOAD DATA LOCAL INPATH '/home/adarsh/futurense_hadoop-pyspark/labs/dataset/weather/weather_data.txt' INTO TABLE demo.weather;
+172   : select * from weather limit 5;
+173   : select max(t_daily_max), min(t_daily_min) from weather;
+174   : SELECT MONTH(FROM_UNIXTIME(UNIX_TIMESTAMP(lst_date, 'yyyyMMdd'), 'yyyy-MM-dd')),max(t_daily_max), min(t_daily_min) from weather group by MONTH(FROM_UNIXTIME(UNIX_TIMESTAMP(lst_date, 'yyyyMMdd'), 'yyyy-MM-dd'));
+175   : history
+176   : ;
+177   : history;
+178   : !history
